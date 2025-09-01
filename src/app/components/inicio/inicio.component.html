@@ -1,0 +1,43 @@
+<div class="inicio-container">
+  <header class="inicio-header">
+    <h1>Bienvenido a TrazaNet</h1>
+    <p class="subtitle">Sistema de Gestión de Trazabilidad Animal</p>
+  </header>
+
+  <!-- Dashboard Section -->
+  <app-dashboard></app-dashboard>
+
+  <div class="features-grid">
+    <div class="feature-card" (click)="navigate('datos')">
+      <div class="icon-container">
+        <i class="fas fa-table"></i>
+      </div>
+      <h3>SNIG</h3>
+      <p>Visualiza y gestiona la información de tus animales de manera eficiente</p>
+    </div>
+
+    <div class="feature-card" (click)="navigate('datos')">
+      <div class="icon-container">
+        <i class="fas fa-users"></i>
+      </div>
+      <h3>Gestión de Propietarios</h3>
+      <p>Administra la información de propietarios y sus animales asociados</p>
+    </div>
+
+    <div class="feature-card" (click)="navigate('datos')">
+      <div class="icon-container">
+        <i class="fas fa-list"></i>
+      </div>
+      <h3>Listas Personalizadas</h3>
+      <p>Crea y gestiona listas personalizadas de propietarios y animales</p>
+    </div>
+
+    <div class="feature-card" (click)="navigate('datos')">
+      <div class="icon-container">
+        <i class="fas fa-file-alt"></i>
+      </div>
+      <h3>Registro de Guías</h3>
+      <p>Gestiona el registro y seguimiento de guías de manera eficiente</p>
+    </div>
+  </div>
+</div> 

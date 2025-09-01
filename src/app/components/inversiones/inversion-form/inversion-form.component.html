@@ -1,0 +1,78 @@
+<div class="form-container">
+  <h2>{{ isEditing ? 'Editar' : 'Nueva' }} Inversión</h2>
+  <form [formGroup]="inversionForm" (ngSubmit)="submitForm()" class="inversion-form">
+    <div class="form-group">
+      <label for="tipo">Tipo de Inversión</label>
+      <select id="tipo" formControlName="tipo" class="form-control">
+        <option value="">Seleccione un tipo</option>
+        <option *ngFor="let tipo of tiposInversion" [value]="tipo">
+          {{tipo | titlecase}}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="inversionForm.get('tipo')?.invalid && inversionForm.get('tipo')?.touched">
+        El tipo de inversión es requerido
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="cantidad">Cantidad</label>
+      <input type="number" id="cantidad" formControlName="cantidad" class="form-control" 
+             placeholder="Ingrese la cantidad">
+      <div class="error-message" *ngIf="inversionForm.get('cantidad')?.invalid && inversionForm.get('cantidad')?.touched">
+        La cantidad es requerida y debe ser mayor a 0
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="precioUnitario">Precio Unitario</label>
+      <input type="number" id="precioUnitario" formControlName="precioUnitario" class="form-control" 
+             placeholder="Ingrese el precio unitario">
+      <div class="error-message" *ngIf="inversionForm.get('precioUnitario')?.invalid && inversionForm.get('precioUnitario')?.touched">
+        El precio unitario es requerido y debe ser mayor a 0
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="costo">Costo Total</label>
+      <input type="number" id="costo" formControlName="costo" class="form-control" 
+             placeholder="Ingrese el costo total">
+      <div class="error-message" *ngIf="inversionForm.get('costo')?.invalid && inversionForm.get('costo')?.touched">
+        El costo es requerido y debe ser mayor a 0
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaInicio">Fecha de Inicio</label>
+      <input type="date" id="fechaInicio" formControlName="fechaInicio" class="form-control">
+      <div class="error-message" *ngIf="inversionForm.get('fechaInicio')?.invalid && inversionForm.get('fechaInicio')?.touched">
+        La fecha de inicio es requerida
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaFin">Fecha de Fin</label>
+      <input type="date" id="fechaFin" formControlName="fechaFin" class="form-control">
+      <div class="error-message" *ngIf="inversionForm.get('fechaFin')?.invalid && inversionForm.get('fechaFin')?.touched">
+        La fecha de fin es requerida
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="descripcion">Descripción</label>
+      <input type="text" id="descripcion" formControlName="descripcion" class="form-control" 
+             placeholder="Ingrese una descripción detallada">
+      <div class="error-message" *ngIf="inversionForm.get('descripcion')?.invalid && inversionForm.get('descripcion')?.touched">
+        La descripción es requerida y debe tener al menos 3 caracteres
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="inversionForm.invalid" class="btn-submit">
+        {{ isEditing ? 'Actualizar' : 'Crear' }} Inversión
+      </button>
+      <button type="button" (click)="cancel()" class="btn-cancel">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div> 

@@ -1,0 +1,513 @@
+<div class="mi-ganado-container">
+  <!-- Barra de herramientas -->
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (ngModelChange)="filterGanado()"
+        placeholder="Buscar ganado..."
+        #searchInput>
+    </div>
+    <div class="toolbar-actions">
+      <button class="chart-btn" (click)="toggleChartPanel()">
+        <i class="fas fa-chart-bar"></i>
+        <span>Ver Gráfico</span>
+      </button>
+      <button class="add-btn" (click)="agregarAnimal()">
+        <i class="fas fa-plus"></i>
+        Agregar Animal
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="content-wrapper">
+    <!-- Tabla de ganado -->
+    <div class="table-container" [class.hidden]="showChartPanel" #tableContainer>
+      <table #table>
+        <thead>
+          <tr>
+            <th (click)="sortGanado('identificacion')">
+              Identificación
+              <i [class]="getSortIcon('identificacion')"></i>
+            </th>
+            <th (click)="sortGanado('raza')">
+              Raza
+              <i [class]="getSortIcon('raza')"></i>
+            </th>
+            <th (click)="sortGanado('sexo')">
+              Sexo
+              <i [class]="getSortIcon('sexo')"></i>
+            </th>
+            <th (click)="sortGanado('categoria')">
+              Categoría
+              <i [class]="getSortIcon('categoria')"></i>
+            </th>
+            <th (click)="sortGanado('edad')">
+              Edad
+              <i [class]="getSortIcon('edad')"></i>
+            </th>
+            <th (click)="sortGanado('peso')">
+              Peso (kg)
+              <i [class]="getSortIcon('peso')"></i>
+            </th>
+            <th (click)="sortGanado('condicionCorporal')">
+              C.C.
+              <i [class]="getSortIcon('condicionCorporal')"></i>
+            </th>
+            <th (click)="sortGanado('largoPelvis')">
+              Largo P.
+              <i [class]="getSortIcon('largoPelvis')"></i>
+            </th>
+            <th (click)="sortGanado('anchoPelvis')">
+              Ancho P.
+              <i [class]="getSortIcon('anchoPelvis')"></i>
+            </th>
+            <th (click)="sortGanado('alturaAnca')">
+              Alt. Anca
+              <i [class]="getSortIcon('alturaAnca')"></i>
+            </th>
+            <th (click)="sortGanado('campo')">
+              Campo
+              <i [class]="getSortIcon('campo')"></i>
+            </th>
+            <th (click)="sortGanado('ubicacion')">
+              Ubicación
+              <i [class]="getSortIcon('ubicacion')"></i>
+            </th>
+            <th (click)="sortGanado('estado')">
+              Estado
+              <i [class]="getSortIcon('estado')"></i>
+            </th>
+            <th (click)="sortGanado('ultimaActualizacion')">
+              Última Actualización
+              <i [class]="getSortIcon('ultimaActualizacion')"></i>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let animal of paginatedGanado" 
+              (contextmenu)="showContextMenuForGanado($event, animal)"
+              [@fadeIn]
+              [class.editing]="isEditing(animal.id, 'identificacion')">
+            <td (click)="startEditing(animal.id, 'identificacion')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'identificacion')">
+                {{ animal.identificacion }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'identificacion')"
+                     [(ngModel)]="animal.identificacion"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'raza')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'raza')">
+                {{ animal.raza }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'raza')"
+                     [(ngModel)]="animal.raza"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'sexo')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'sexo')">
+                {{ animal.sexo }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'sexo')"
+                     [(ngModel)]="animal.sexo"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'categoria')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'categoria')">
+                {{ getCategoria(animal) }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'categoria')"
+                     [(ngModel)]="animal.categoria"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'edad')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'edad')">
+                {{ animal.edad }} años
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'edad')"
+                     [(ngModel)]="animal.edad"
+                     type="number"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'peso')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'peso')">
+                <span class="numeric-value">{{ animal.peso }}</span>
+                <span class="unit">kg</span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'peso')"
+                     [(ngModel)]="animal.peso"
+                     type="number"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'condicionCorporal')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'condicionCorporal')">
+                <span class="numeric-value">{{ animal.condicionCorporal }}</span>
+                <span class="unit">/7</span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'condicionCorporal')"
+                     [(ngModel)]="animal.condicionCorporal"
+                     type="number"
+                     min="1"
+                     max="7"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'largoPelvis')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'largoPelvis')">
+                <span class="numeric-value">{{ animal.largoPelvis || '-' }}</span>
+                <span class="unit" *ngIf="animal.largoPelvis">cm</span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'largoPelvis')"
+                     [(ngModel)]="animal.largoPelvis"
+                     type="number"
+                     step="0.1"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'anchoPelvis')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'anchoPelvis')">
+                <span class="numeric-value">{{ animal.anchoPelvis || '-' }}</span>
+                <span class="unit" *ngIf="animal.anchoPelvis">cm</span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'anchoPelvis')"
+                     [(ngModel)]="animal.anchoPelvis"
+                     type="number"
+                     step="0.1"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'alturaAnca')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'alturaAnca')">
+                <span class="numeric-value">{{ animal.alturaAnca || '-' }}</span>
+                <span class="unit" *ngIf="animal.alturaAnca">cm</span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'alturaAnca')"
+                     [(ngModel)]="animal.alturaAnca"
+                     type="number"
+                     step="0.1"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'campo')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'campo')">
+                {{ animal.campo }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'campo')"
+                     [(ngModel)]="animal.campo"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'ubicacion')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'ubicacion')">
+                {{ animal.ubicacion }}
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <input *ngIf="isEditing(animal.id, 'ubicacion')"
+                     [(ngModel)]="animal.ubicacion"
+                     (blur)="stopEditing()"
+                     (keyup.enter)="stopEditing()"
+                     (keyup.escape)="stopEditing()"
+                     class="edit-input"
+                     autofocus>
+            </td>
+            <td (click)="startEditing(animal.id, 'estado')" class="editable-cell">
+              <ng-container *ngIf="!isEditing(animal.id, 'estado')">
+                <span class="status-badge" [class]="getStatusClass(animal.estado)">
+                  {{ animal.estado }}
+                </span>
+                <i class="fas fa-edit edit-icon"></i>
+              </ng-container>
+              <select *ngIf="isEditing(animal.id, 'estado')"
+                      [(ngModel)]="animal.estado"
+                      (blur)="stopEditing()"
+                      (change)="stopEditing()"
+                      class="edit-input"
+                      autofocus>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+                <option value="En tratamiento">En tratamiento</option>
+              </select>
+            </td>
+            <td>{{ animal.ultimaActualizacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          </tr>
+          <tr *ngIf="paginatedGanado.length === 0">
+            <td colspan="9" class="empty-message">
+              <div class="no-data">
+                <i class="fas fa-search"></i>
+                <p>No se encontraron resultados</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel de gráfico centrado o detalles -->
+    <div class="chart-panel" *ngIf="showChartPanel" [@slideIn]>
+      <button class="close-btn" (click)="toggleChartPanel()" style="position:absolute;top:12px;right:12px;z-index:10;">
+        <i class="fas fa-times"></i>
+      </button>
+      <ng-container *ngIf="chartType === 'detalles'; else chartsPanel">
+        <div class="dashboard-grid">
+          <div class="animal-details-card chart-card">
+            <h2>Detalles del Animal</h2>
+            <div *ngIf="selectedAnimal" class="animal-details-columns">
+              <div class="details-col">
+                <p><strong>Identificación:</strong> {{ selectedAnimal.identificacion }}</p>
+                <p><strong>Raza:</strong> {{ selectedAnimal.raza }}</p>
+                <p><strong>Sexo:</strong> {{ selectedAnimal.sexo }}</p>
+                <p><strong>Categoría:</strong> {{ getCategoria(selectedAnimal) }}</p>
+                <p><strong>Edad:</strong> {{ selectedAnimal.edad }} años</p>
+                <p><strong>Peso:</strong> {{ selectedAnimal.peso }} kg</p>
+                <p><strong>Condición Corporal:</strong> {{ selectedAnimal.condicionCorporal }} / 7</p>
+              </div>
+              <div class="details-col">
+                <p><strong>Largo Pelvis:</strong> {{ selectedAnimal.largoPelvis || '-' }} cm</p>
+                <p><strong>Ancho Pelvis:</strong> {{ selectedAnimal.anchoPelvis || '-' }} cm</p>
+                <p><strong>Altura Anca:</strong> {{ selectedAnimal.alturaAnca || '-' }} cm</p>
+                <p><strong>Campo:</strong> {{ selectedAnimal.campo }}</p>
+                <p><strong>Ubicación:</strong> {{ selectedAnimal.ubicacion }}</p>
+                <p><strong>Estado:</strong> {{ selectedAnimal.estado }}</p>
+                <p><strong>Última Actualización:</strong> {{ selectedAnimal.ultimaActualizacion | date:'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <ng-container *ngIf="selectedAnimal; else campoChart">
+              <h4>Medidas Corporales 3D</h4>
+              <div #medidas3DContainer class="medidas-3d-container"></div>
+            </ng-container>
+            <ng-template #campoChart>
+              <h4>Rendimiento por Campo</h4>
+              <canvas #campoChartCanvas></canvas>
+            </ng-template>
+          </div>
+          <div class="chart-card" style="width:100%;height:350px;">
+            <h4>Mapa de Ubicación</h4>
+            <div #animalMapContainer class="animal-map-container" style="width:100%;height:300px;"></div>
+          </div>
+          <div class="animal-profit-card chart-card" *ngIf="selectedAnimal">
+            <h4>Rentabilidad del Animal</h4>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                <span>Gráfico</span>
+                <input type="checkbox" [(ngModel)]="showProfitChart">
+              </label>
+            </div>
+            <ng-container *ngIf="!showProfitChart">
+              <p style="margin-top: 10px;">Rentabilidad estimada: <strong>$ N/A</strong></p>
+              <p style="font-size: 13px; color: #888;">(Ejemplo de datos, personalizable)</p>
+            </ng-container>
+            <ng-container *ngIf="showProfitChart">
+              <canvas #profitChart style="width:100%;height:180px;"></canvas>
+            </ng-container>
+          </div>
+          <div class="bitacora-alertas-card chart-card" *ngIf="selectedAnimal">
+            <h4>Bitácora y Alertas</h4>
+            <p style="color:#888;font-size:14px;">Aquí se mostrarán eventos importantes, alertas y registros recientes del animal seleccionado.</p>
+            <!-- Puedes agregar aquí una lista de eventos, alertas o mensajes -->
+          </div>
+          <div class="listas-participa-card chart-card" *ngIf="selectedAnimal">
+            <h4>Listas en que participa</h4>
+            <p style="color:#888;font-size:14px;">Aquí se mostrarán las listas, grupos o lotes en los que participa este animal.</p>
+            <!-- Puedes agregar aquí una lista dinámica de lotes o grupos -->
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #chartsPanel>
+        <div class="dashboard-grid">
+          <div class="animal-details-card chart-card" *ngIf="selectedAnimal">
+            <h2>Detalles del Animal</h2>
+            <div class="animal-details-columns">
+              <div class="details-col">
+                <p><strong>Identificación:</strong> {{ selectedAnimal.identificacion }}</p>
+                <p><strong>Raza:</strong> {{ selectedAnimal.raza }}</p>
+                <p><strong>Sexo:</strong> {{ selectedAnimal.sexo }}</p>
+                <p><strong>Categoría:</strong> {{ getCategoria(selectedAnimal) }}</p>
+                <p><strong>Edad:</strong> {{ selectedAnimal.edad }} años</p>
+                <p><strong>Peso:</strong> {{ selectedAnimal.peso }} kg</p>
+                <p><strong>Condición Corporal:</strong> {{ selectedAnimal.condicionCorporal }} / 7</p>
+              </div>
+              <div class="details-col">
+                <p><strong>Largo Pelvis:</strong> {{ selectedAnimal.largoPelvis || '-' }} cm</p>
+                <p><strong>Ancho Pelvis:</strong> {{ selectedAnimal.anchoPelvis || '-' }} cm</p>
+                <p><strong>Altura Anca:</strong> {{ selectedAnimal.alturaAnca || '-' }} cm</p>
+                <p><strong>Campo:</strong> {{ selectedAnimal.campo }}</p>
+                <p><strong>Ubicación:</strong> {{ selectedAnimal.ubicacion }}</p>
+                <p><strong>Estado:</strong> {{ selectedAnimal.estado }}</p>
+                <p><strong>Última Actualización:</strong> {{ selectedAnimal.ultimaActualizacion | date:'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h4>Evolución del Peso</h4>
+            <canvas #weightChart></canvas>
+          </div>
+          <div class="chart-card">
+            <ng-container *ngIf="selectedAnimal; else campoChart">
+              <h4>Medidas Corporales 3D</h4>
+              <div #medidas3DContainer class="medidas-3d-container"></div>
+            </ng-container>
+            <ng-template #campoChart>
+              <h4>Rendimiento por Campo</h4>
+              <canvas #campoChartCanvas></canvas>
+            </ng-template>
+          </div>
+          <div class="chart-card" style="width:100%;height:350px;">
+            <h4>Mapa de Ubicación</h4>
+            <div #animalMapContainer class="animal-map-container" style="width:100%;height:300px;"></div>
+          </div>
+          <div class="animal-profit-card chart-card" *ngIf="selectedAnimal">
+            <h4>Rentabilidad del Animal</h4>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                <span>Gráfico</span>
+                <input type="checkbox" [(ngModel)]="showProfitChart">
+              </label>
+            </div>
+            <ng-container *ngIf="!showProfitChart">
+              <p style="margin-top: 10px;">Rentabilidad estimada: <strong>$ N/A</strong></p>
+              <p style="font-size: 13px; color: #888;">(Ejemplo de datos, personalizable)</p>
+            </ng-container>
+            <ng-container *ngIf="showProfitChart">
+              <canvas #profitChart style="width:100%;height:180px;"></canvas>
+            </ng-container>
+          </div>
+          <div class="bitacora-alertas-card chart-card" *ngIf="selectedAnimal">
+            <h4>Bitácora y Alertas</h4>
+            <p style="color:#888;font-size:14px;">Aquí se mostrarán eventos importantes, alertas y registros recientes del animal seleccionado.</p>
+            <!-- Puedes agregar aquí una lista de eventos, alertas o mensajes -->
+          </div>
+          <div class="listas-participa-card chart-card" *ngIf="selectedAnimal">
+            <h4>Listas en que participa</h4>
+            <p style="color:#888;font-size:14px;">Aquí se mostrarán las listas, grupos o lotes en los que participa este animal.</p>
+            <!-- Puedes agregar aquí una lista dinámica de lotes o grupos -->
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination" *ngIf="totalPages > 1 && !showChartPanel">
+    <button 
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button 
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Mensaje cuando no hay datos -->
+  <div class="no-data" *ngIf="filteredGanado.length === 0">
+    <i class="fas fa-leaf"></i>
+    <p>No se encontraron registros de ganado</p>
+  </div>
+
+  <!-- Menú contextual -->
+  <div class="context-menu" 
+       *ngIf="showContextMenu" 
+       [style.left.px]="contextMenuX" 
+       [style.top.px]="contextMenuY">
+    <ul>
+      <!-- <li (click)="verDetalles(selectedGanado)">
+        <i class="fas fa-eye"></i>
+        Ver detalles
+      </li> -->
+      <li (click)="verHistorial(selectedGanado)">
+        <i class="fas fa-history"></i>
+        Ver historial
+      </li>
+      <li (click)="hideContextMenu()">
+        <i class="fas fa-edit"></i>
+        Editar
+      </li>
+      <li (click)="showAnimalPerformance(selectedGanado)">
+        <i class="fas fa-chart-line"></i>
+        Ver Rendimiento
+      </li>
+      <li class="danger" (click)="eliminarAnimal(selectedGanado)">
+        <i class="fas fa-trash"></i>
+        Eliminar
+      </li>
+    </ul>
+  </div>
+
+  <!-- Modal de historial -->
+  <div class="modal-overlay" *ngIf="showHistorial" [@fadeIn]>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>Historial del Animal</h2>
+        <button class="close-btn" (click)="cerrarHistorial()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-content">
+        <app-historial-animal 
+          *ngIf="selectedAnimalForHistorial"
+          [animal]="selectedAnimalForHistorial">
+        </app-historial-animal>
+      </div>
+    </div>
+  </div>
+</div> 

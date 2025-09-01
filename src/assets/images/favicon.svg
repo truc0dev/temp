@@ -1,0 +1,34 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .cow {
+      fill: none;
+      stroke: #333;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .lines {
+      fill: none;
+      stroke: #00C853;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+  </style>
+  
+  <!-- Vaca principal -->
+  <path class="cow" d="M6,16 Q8,12 12,12 L20,12 Q24,12 26,16 L26,20 Q26,22 24,22 L8,22 Q6,22 6,20 Z"/>
+  <path class="cow" d="M8,12 L10,8"/>
+  <path class="cow" d="M24,12 L22,8"/>
+  <circle class="cow" cx="14" cy="17" r="1"/>
+  
+  <!-- Vaca pequeña -->
+  <path class="cow" d="M20,8 Q21,6 23,6 L25,6 Q27,6 28,8 L28,10 Q28,11 27,11 L21,11 Q20,11 20,10 Z" transform="scale(0.5) translate(24,0)"/>
+  
+  <!-- Líneas verdes -->
+  <line class="lines" x1="24" y1="12" x2="30" y2="12"/>
+  <line class="lines" x1="24" y1="15" x2="28" y2="15"/>
+  <line class="lines" x1="24" y1="18" x2="26" y2="18"/>
+  
+  <!-- Línea ondulada verde -->
+  <path class="lines" d="M24,24 Q26,23 28,24 Q30,25 32,24"/>
+</svg> 

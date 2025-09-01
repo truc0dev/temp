@@ -1,0 +1,66 @@
+<div class="movimientos-container">
+  <h2><i class="fas fa-exchange-alt"></i> Registro de Movimientos de Ganado</h2>
+  <form class="mov-form" (ngSubmit)="registrarMovimiento()">
+    <div class="form-row">
+      <label>Seleccionar Guía</label>
+      <select class="custom-select" [(ngModel)]="guiaSeleccionada" name="guiaSeleccionada" required>
+        <option *ngFor="let guia of guias" [ngValue]="guia">{{ guia.nombre }}</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Origen</label>
+      <input type="text" [(ngModel)]="origen" name="origen" placeholder="Campo origen" required>
+    </div>
+    <div class="form-row">
+      <label>Destino</label>
+      <input type="text" [(ngModel)]="destino" name="destino" placeholder="Campo destino" required>
+    </div>
+    <div class="form-row">
+      <label>Ubicación GPS</label>
+      <input type="text" [(ngModel)]="gps" name="gps" placeholder="Capturar ubicación" readonly>
+      <button type="button" (click)="capturarGPS()"><i class="fas fa-map-marker-alt"></i> Capturar GPS</button>
+    </div>
+    <div class="form-row">
+      <label>Firma Productor</label>
+      <input type="text" [(ngModel)]="productorFirma" name="productorFirma" placeholder="Nombre productor" required>
+    </div>
+    <div class="form-row">
+      <label>Firma Transportista</label>
+      <input type="text" [(ngModel)]="transportistaFirma" name="transportistaFirma" placeholder="Nombre transportista" required>
+    </div>
+    <button class="submit-btn" type="submit"><i class="fas fa-check"></i> Registrar Movimiento</button>
+  </form>
+
+  <h3>Historial de Movimientos</h3>
+  <table class="mov-table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Caravana</th>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>GPS</th>
+        <th>Productor</th>
+        <th>Transportista</th>
+        <th>Guía</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mov of movimientos">
+        <td>{{ mov.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ mov.caravana }}</td>
+        <td>{{ mov.origen }}</td>
+        <td>{{ mov.destino }}</td>
+        <td>{{ mov.gps }}</td>
+        <td>{{ mov.productor }}</td>
+        <td>{{ mov.transportista }}</td>
+        <td>{{ mov.guia }}</td>
+        <td>{{ mov.estado }}</td>
+      </tr>
+      <tr *ngIf="movimientos.length === 0">
+        <td colspan="9" class="empty-message">No hay movimientos registrados</td>
+      </tr>
+    </tbody>
+  </table>
+</div> 

@@ -1,0 +1,312 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+.auth-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 900px;
+  height: 550px;
+  margin: 1.5rem;
+  background-color: var(--background-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+app-theme-switch {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+
+/* Panel verde (izquierda) */
+.overlay-container {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  order: 1;
+}
+
+.overlay-panel {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Formulario (derecha) */
+.sign-up-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 2;
+}
+
+.form-content {
+  width: 100%;
+  max-width: 320px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Resto de estilos igual que en register.component.css */
+.brand-container {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.brand-container h1 {
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.dot {
+  color: var(--light-green);
+}
+
+.subtitle-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1.2rem;
+  text-align: left;
+  margin: 0;
+  padding: 25px;
+  opacity: 0.9;
+  z-index: 10;
+}
+
+.subtitle-block p {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.subtitle-block strong {
+  font-weight: 600;
+  color: var(--light-green);
+}
+
+.tagline {
+  font-size: 1.6rem;
+}
+
+.tagline p {
+  margin: 0.3rem 0;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.tagline p:last-child {
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* Estilos de formulario */
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.social-container {
+  margin: 15px 0;
+}
+
+.social {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  background-color: var(--background-grey);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  color: var(--text-primary);
+}
+
+.social:hover {
+  background-color: var(--background-light);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.social i {
+  font-size: 1.2rem;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-color: var(--background-grey);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px var(--light-green);
+}
+
+.password-input {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 5px;
+  width: auto;
+  margin: 0;
+}
+
+/* Botones */
+button {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--primary-green);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--secondary-green);
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+button.ghost {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  width: auto;
+  padding: 12px 40px;
+  font-size: 0.9rem;
+  border-radius: 25px;
+  margin-top: 1rem;
+}
+
+button.ghost:hover {
+  background-color: white;
+  color: var(--primary-green);
+}
+
+span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 10px 0 15px;
+}
+
+.error-hint {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.error-message {
+  color: #dc3545;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background-color: #fff5f5;
+  border-radius: 6px;
+  width: 100%;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .auth-container {
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    max-width: none;
+  }
+
+  .form-content {
+    padding: 20px;
+  }
+
+  .overlay-panel {
+    padding: 20px;
+  }
+
+  .brand-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .tagline {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .auth-container {
+    height: 100vh;
+  }
+} 

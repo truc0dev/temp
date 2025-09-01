@@ -1,0 +1,48 @@
+<div class="list-container">
+  <h2>Lista de Inversiones</h2>
+  
+  <div *ngIf="inversiones.length === 0" class="no-data">
+    No hay inversiones registradas
+  </div>
+
+  <table *ngIf="inversiones.length > 0" class="inversion-table">
+    <thead>
+      <tr>
+        <th (click)="sort('tipo')" class="sortable">
+          Tipo
+          <span class="sort-icon">{{ sortKey === 'tipo' ? (sortAsc ? '↑' : '↓') : '' }}</span>
+        </th>
+        <th>Descripción</th>
+        <th (click)="sort('fechaInicio')" class="sortable">
+          Fecha Inicio
+          <span class="sort-icon">{{ sortKey === 'fechaInicio' ? (sortAsc ? '↑' : '↓') : '' }}</span>
+        </th>
+        <th (click)="sort('fechaFin')" class="sortable">
+          Fecha Fin
+          <span class="sort-icon">{{ sortKey === 'fechaFin' ? (sortAsc ? '↑' : '↓') : '' }}</span>
+        </th>
+        <th (click)="sort('costo')" class="sortable">
+          Costo
+          <span class="sort-icon">{{ sortKey === 'costo' ? (sortAsc ? '↑' : '↓') : '' }}</span>
+        </th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <div class="table-container">
+      <tbody>
+        <tr *ngFor="let inversion of inversiones">
+          <td>{{ inversion.tipo | titlecase }}</td>
+          <td>{{ inversion.descripcion }}</td>
+          <td>{{ inversion.fechaInicio | date }}</td>
+          <td>{{ inversion.fechaFin | date }}</td>
+          <td>{{ inversion.costo | currency }}</td>
+          <td>
+            <button class="btn-delete" (click)="deleteInversion(inversion.id!)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </div>
+  </table>
+</div> 

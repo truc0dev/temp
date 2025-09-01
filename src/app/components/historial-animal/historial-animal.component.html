@@ -1,0 +1,59 @@
+<div class="historial-container">
+  <div class="animal-info">
+    <h2>Información del Animal</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label">Identificación:</span>
+        <span class="value">{{animal?.identificacion}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Raza:</span>
+        <span class="value">{{animal?.raza}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Sexo:</span>
+        <span class="value">{{animal?.sexo}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Edad:</span>
+        <span class="value">{{animal?.edad}} meses</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Peso Actual:</span>
+        <span class="value">{{animal?.peso}} kg</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Estado:</span>
+        <span class="value">{{animal?.estado}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Ubicación:</span>
+        <span class="value">{{animal?.ubicacion}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Condición Corporal:</span>
+        <span class="value">{{animal?.condicionCorporal}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Campo:</span>
+        <span class="value">{{animal?.campo}}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Última Actualización:</span>
+        <span class="value">{{animal?.ultimaActualizacion | date:'dd/MM/yyyy HH:mm'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-container">
+    <div class="chart-wrapper">
+      <canvas #pesoChart></canvas>
+    </div>
+    <div class="chart-wrapper">
+      <canvas #medidasChart></canvas>
+    </div>
+    <div class="chart-wrapper">
+      <canvas #estadoChart></canvas>
+    </div>
+  </div>
+</div> 

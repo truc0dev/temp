@@ -1,0 +1,49 @@
+<div class="analytics-container">
+  <div class="chart-card">
+    <h3>{{ charts[selectedChart].label }}</h3>
+    <div class="chart-wrapper">
+      <ng-container [ngSwitch]="selectedChart">
+        <ng-container *ngSwitchCase="0">
+          <canvas baseChart
+            [data]="pieChartData"
+            [type]="'pie'"
+            [options]="{
+              responsive: true,
+              plugins: { legend: { position: 'bottom' } }
+            }">
+          </canvas>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <canvas baseChart
+            [data]="barChartData"
+            [type]="'bar'"
+            [options]="{
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true } }
+            }">
+          </canvas>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+          <canvas baseChart
+            [data]="lineChartData"
+            [type]="'line'"
+            [options]="{
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true } }
+            }">
+          </canvas>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="chart-switch">
+      <span
+        *ngFor="let chart of charts; let i = index"
+        class="switch-dot"
+        [class.active]="i === selectedChart"
+        (click)="setChart(i)">
+      </span>
+    </div>
+  </div>
+</div> 

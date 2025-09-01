@@ -1,0 +1,75 @@
+<div class="inversiones-container">
+  <div class="header">
+    <h2>Inversiones</h2>
+    <button class="btn-update" (click)="updateTickets()" [disabled]="selectedInversiones.length === 0">
+      Actualizar Tickets
+    </button>
+  </div>
+
+  <div class="inversiones-list">
+    <div class="list-header">
+      <h2>Lista de Inversiones</h2>
+      <div class="actions">
+        <button class="btn-primary" (click)="editInversion({} as Inversion)">
+          Nueva Inversión
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="inversiones-table">
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" 
+                     [checked]="selectedInversiones.length === inversiones.length"
+                     (change)="toggleAll()">
+            </th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Costo</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Descripción</th>
+            <th>Resultado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inversion of inversiones">
+            <td>
+              <input type="checkbox" 
+                     [checked]="selectedInversiones.some(i => i.id === inversion.id)"
+                     (change)="toggleSelection(inversion)">
+            </td>
+            <td>{{ inversion.tipo }}</td>
+            <td>{{ inversion.cantidad }}</td>
+            <td>{{ inversion.precioUnitario | currency }}</td>
+            <td>{{ inversion.costo | currency }}</td>
+            <td>{{ inversion.fechaInicio | date }}</td>
+            <td>{{ inversion.fechaFin | date }}</td>
+            <td>{{ inversion.descripcion }}</td>
+            <td>{{ inversion.resultado | currency }}</td>
+            <td class="actions">
+              <button class="btn-edit" (click)="editInversion(inversion)">
+                Editar
+              </button>
+              <button class="btn-delete" (click)="deleteInversion(inversion)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <app-inversion-form 
+      *ngIf="editingInversion !== null"
+      [inversion]="editingInversion"
+      [isEditing]="editingInversion.id !== undefined"
+      (onSubmit)="onInversionUpdated($event)"
+      (onCancel)="onCancelEdit()">
+    </app-inversion-form>
+  </div>
+</div> 

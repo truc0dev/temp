@@ -1,0 +1,125 @@
+<div class="auth-container">
+  <app-theme-switch></app-theme-switch>
+  
+  <!-- Panel verde (izquierda) -->
+  <div class="overlay-container">
+    <div class="subtitle-block">
+      <p><strong>+</strong>CríaUY</p>
+    </div>
+    <div class="overlay-panel">
+      <div class="brand-container">
+        <h1>trazaNet<span class="dot">.</span></h1>
+        <div class="tagline">
+          <p>Sistema Integral</p>
+          <p>de Gestión</p>
+          <p>Ganadera</p>
+        </div>
+      </div>
+      <p>¿Ya tienes una cuenta? Inicia sesión para continuar.</p>
+      <button class="ghost" (click)="goToLogin()">INICIAR SESIÓN</button>
+    </div>
+  </div>
+
+  <!-- Formulario de registro (derecha) -->
+  <div class="sign-up-container">
+    <div class="form-content">
+      <h1>Crear Cuenta</h1>
+      <div class="social-container">
+        <button (click)="registerWithGoogle()" class="social">
+          <i class="fab fa-google"></i>
+        </button>
+      </div>
+      <span>o usa tu correo para registrarte</span>
+      
+      <div class="register-container">
+        <div class="register-form">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                [ngClass]="{ 'is-invalid': submitted && f['name'].errors }"
+              />
+              <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+                <div *ngIf="f['name'].errors['required']">El nombre es requerido</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Apellido</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }"
+              />
+              <div *ngIf="submitted && f['lastName'].errors" class="invalid-feedback">
+                <div *ngIf="f['lastName'].errors['required']">El apellido es requerido</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+              />
+              <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                <div *ngIf="f['email'].errors['required']">El email es requerido</div>
+                <div *ngIf="f['email'].errors['email']">El email no es válido</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <div class="password-input">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="password"
+                  formControlName="password"
+                  [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+                />
+                <button type="button" class="toggle-password" (click)="togglePassword()">
+                  <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                <div *ngIf="f['password'].errors['required']">La contraseña es requerida</div>
+                <div *ngIf="f['password'].errors['minlength']">La contraseña debe tener al menos 6 caracteres</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirmar Contraseña</label>
+              <div class="password-input">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  [ngClass]="{ 'is-invalid': submitted && (f['confirmPassword'].errors || registerForm.hasError('mismatch')) }"
+                />
+              </div>
+              <div *ngIf="submitted && (f['confirmPassword'].errors || registerForm.hasError('mismatch'))" class="invalid-feedback">
+                <div *ngIf="f['confirmPassword'].errors?.['required']">La confirmación de contraseña es requerida</div>
+                <div *ngIf="registerForm.hasError('mismatch')">Las contraseñas no coinciden</div>
+              </div>
+            </div>
+
+            <button type="submit" [disabled]="loading" class="btn-register">
+              <span *ngIf="loading" class="spinner"></span>
+              {{ loading ? 'Registrando...' : 'Registrarse' }}
+            </button>
+
+            <div class="login-link">
+              ¿Ya tienes una cuenta? <a (click)="goToLogin()">Inicia sesión</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,142 @@
+<div class="container">
+  <div class="toolbar">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="terminoBusqueda" 
+        (input)="buscar()"
+        placeholder="Buscar en todos los campos...">
+    </div>
+    
+    <div class="action-buttons">
+      <input 
+        #fileInput
+        type="file" 
+        (change)="onFileSelected($event)"
+        accept=".xls,.xlsx"
+        class="hidden-file-input">
+      <button class="btn btn-success" (click)="fileInput.click()">
+        <i class="fas fa-file-upload"></i>
+        Cargar Excel
+      </button>
+      <button class="btn btn-danger" (click)="vaciarLista()">
+        <i class="fas fa-trash"></i>
+        Vaciar Lista
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Dispositivo</th>
+          <th>Raza</th>
+          <th>Cruza</th>
+          <th>Sexo</th>
+          <th>Edad (meses)</th>
+          <th>Edad (días)</th>
+          <th>Propietario</th>
+          <th>Nombre Propietario</th>
+          <th>Ubicación</th>
+          <th>Tenedor</th>
+          <th>Status de vida</th>
+          <th>Status de trazabilidad</th>
+          <th>Errores</th>
+          <th>Fecha identificación</th>
+          <th>Fecha registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let animal of animalesFiltrados" 
+            (contextmenu)="onContextMenu($event, animal)"
+            [class.selected]="animal === selectedAnimal">
+          <td [innerHTML]="animal.dispositivo | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.raza | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.cruza | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.sexo | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="(animal.edadMeses || 0).toString() | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="(animal.edadDias || 0).toString() | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.propietario | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.nombrePropietario | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.ubicacion | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.tenedor | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.statusVida | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.statusTrazabilidad | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.errores | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.fechaIdentificacion | highlight:terminoBusqueda"></td>
+          <td [innerHTML]="animal.fechaRegistro | highlight:terminoBusqueda"></td>
+        </tr>
+        <tr *ngIf="animalesFiltrados.length === 0">
+          <td colspan="15" class="empty-message">
+            No hay datos disponibles. Arrastra un archivo Excel para cargar información.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Menú contextual -->
+  <div class="context-menu" *ngIf="showContextMenu" 
+       [style.left.px]="contextMenuX" 
+       [style.top.px]="contextMenuY"
+       (click)="onContextMenuClick($event)">
+    <button (click)="exportarExcel()">
+      <i class="fas fa-file-excel"></i>
+      Exportar a Excel
+    </button>
+    <button (click)="mostrarInputNuevaLista()">
+      <i class="fas fa-plus"></i>
+      Nueva Lista
+    </button>
+    <button (click)="mostrarListasDisponibles()">
+      <i class="fas fa-list"></i>
+      Agregar a Lista
+    </button>
+  </div>
+
+  <!-- Input de nueva lista -->
+  <div class="new-list-input" *ngIf="showNewListInput"
+       [style.left.px]="contextMenuPosition.x"
+       [style.top.px]="contextMenuPosition.y">
+    <input type="text" [(ngModel)]="newListName" placeholder="Nombre de la lista"
+           (keyup.enter)="crearLista()">
+    <div class="input-actions">
+      <button class="save-btn" (click)="crearLista()" [disabled]="!newListName.trim()">
+        <i class="fas fa-check"></i>
+      </button>
+      <button class="cancel-btn" (click)="showNewListInput = false">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de listas disponibles -->
+  <div class="available-lists" *ngIf="showAvailableLists"
+       [style.left.px]="contextMenuPosition.x"
+       [style.top.px]="contextMenuPosition.y">
+    <div class="lists-header">
+      <h3>Seleccionar Lista</h3>
+      <button class="close-btn" (click)="showAvailableLists = false">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="lists-content">
+      <div *ngFor="let lista of listas" class="list-item" (click)="agregarALista(selectedAnimal!, lista)">
+        <span class="list-name">{{ lista.nombre }}</span>
+        <span class="list-count">{{ getListaCount(lista) }} elementos</span>
+      </div>
+      <div *ngIf="listas.length === 0" class="empty-lists">
+        No hay listas disponibles
+      </div>
+    </div>
+  </div>
+
+  <div class="drag-overlay" [class.active]="isDragging">
+    <div class="drag-message">
+      <i class="fas fa-file-excel"></i>
+      <h3>Suelta el archivo Excel aquí</h3>
+      <p>Arrastra y suelta tu archivo .xls o .xlsx para cargar los datos</p>
+    </div>
+  </div>
+</div> 

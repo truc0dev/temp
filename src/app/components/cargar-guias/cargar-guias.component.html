@@ -1,0 +1,174 @@
+<!-- Diálogo de procesamiento -->
+<div class="process-dialog" *ngIf="showProcessDialog">
+  <div class="dialog-header">
+    <h2>Guías procesadas por propietario</h2>
+    <button class="close-btn" (click)="showProcessDialog = false">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="dialog-content">
+    <div *ngFor="let guia of processedGuides" class="guia-item">
+      <div class="guia-header">
+        <div class="propietario-info">
+          <div class="propietario-nombre">
+            <span class="numero">Propietario: {{ guia.propietario }} - {{ guia.nombrePropietario }}</span>
+          </div>
+          <div class="guia-stats">
+            <p>{{ guia.dispositivos.length }} dispositivos encontrados</p>
+          </div>
+        </div>
+        <button class="download-btn" (click)="descargarGuiaProcesada(guia.propietario, guia.nombrePropietario, guia.dispositivos)">
+          <i class="fas fa-download"></i>
+          Descargar
+        </button>
+      </div>
+      <div class="dispositivos-list">
+        <div *ngFor="let dispositivo of guia.dispositivos" class="dispositivo-item">
+          {{ dispositivo }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="processedGuides.length === 0" class="empty-message">
+      No se encontraron guías para procesar
+    </div>
+  </div>
+</div>
+
+<style>
+.process-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  background: var(--background-light);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
+
+.dialog-content {
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: calc(80vh - 60px);
+}
+
+.guia-item {
+  background: var(--background-grey);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.guia-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.propietario-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.propietario-nombre {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.propietario-nombre .numero {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.propietario-nombre h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.guia-stats {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.download-btn {
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  margin-left: 1rem;
+}
+
+.download-btn:hover {
+  background: var(--secondary-green);
+  transform: translateY(-1px);
+}
+
+.dispositivos-list {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.dispositivo-item {
+  background: var(--background-light);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+</style> 

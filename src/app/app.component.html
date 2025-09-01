@@ -1,0 +1,259 @@
+<!-- SVG Symbols -->
+<svg display="none">
+  <symbol id="light" viewBox="0 0 24 24">
+    <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(0,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(45,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(90,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(135,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(180,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(225,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(270,12,12)" />
+      <line x1="12" y1="17" x2="12" y2="20" transform="rotate(315,12,12)" />
+    </g>
+    <circle fill="currentColor" cx="12" cy="12" r="5" />
+  </symbol>
+  <symbol id="dark" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M15.1,14.9c-3-0.5-5.5-3-6-6C8.8,7.1,9.1,5.4,9.9,4c0.4-0.8-0.4-1.7-1.2-1.4C4.6,4,1.8,7.9,2,12.5c0.2,5.1,4.4,9.3,9.5,9.5c4.5,0.2,8.5-2.6,9.9-6.6c0.3-0.8-0.6-1.7-1.4-1.2C18.6,14.9,16.9,15.2,15.1,14.9z" />
+  </symbol>
+  <symbol id="cow" viewBox="0 0 800 600">
+    <path fill="currentColor" d="M200,300 Q300,200 400,300 Q500,400 600,300 L600,400 Q500,500 400,400 Q300,300 200,400 Z"/>
+    <path fill="currentColor" d="M350,250 Q400,200 450,250 L450,350 Q400,400 350,350 Z"/>
+    <path fill="currentColor" d="M250,400 L250,500 L300,500 L300,400 Z"/>
+    <path fill="currentColor" d="M500,400 L500,500 L550,500 L550,400 Z"/>
+  </symbol>
+</svg>
+
+<!-- Sidebar fijo -->
+<nav class="sidebar" [class.expanded]="isExpanded" *ngIf="!isAuthPage">
+  <!-- Botón hamburguesa fijo -->
+  <div class="menu-toggle" (click)="handleMenuToggle()">
+    <i class="fas" [class.fa-bars]="!isExpanded" [class.fa-arrow-left]="isExpanded"></i>
+  </div>
+
+  <div class="sidebar-content">
+    <!-- Menú principal -->
+    <ul class="menu-section">
+      <!-- Opciones de navegación -->
+      <li class="menu-item" [class.active]="currentRoute === 'inicio'" (click)="navigateTo('inicio')">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'mis-animales'" (click)="navigateTo('mis-animales')">
+        <img src="assets/vacaMisAnimalesLogo2.png" class="menu-icon" alt="Mi Ganado">
+        <span>Mis Animales</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'listas'" (click)="navigateTo('listas')">
+        <i class="fas fa-list"></i>
+        <span>Listas</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'guias'" (click)="navigateTo('guias')">
+        <i class="fas fa-book"></i>
+        <span>Guías</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'inversiones'" (click)="navigateTo('inversiones')">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Inversiones</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'movimientos'" (click)="navigateTo('movimientos')">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Movimientos</span>
+      </li>
+      <li class="menu-item" [class.active]="currentRoute === 'datos'" (click)="navigateTo('datos')">
+        <i class="fas fa-table"></i>
+        <span>SNIG</span>
+      </li>
+      <!-- Panel de administración (solo para admins) -->
+      <li class="menu-item" *ngIf="isAdmin()" [class.active]="currentRoute === 'admin'" (click)="navigateTo('admin')">
+        <i class="fas fa-users-cog"></i>
+        <span>Administración</span>
+      </li>
+    </ul>
+    
+    <!-- Espaciador flexible -->
+    <div class="menu-spacer"></div>
+    
+    <!-- Sección de cerrar sesión -->
+    <ul class="menu-section">
+      <!-- Switch de tema -->
+      <li class="menu-item theme-switch" *ngIf="isExpanded">
+        <label class="switch">
+          <input class="switch__input" type="checkbox" [checked]="isDarkTheme" (change)="toggleTheme()">
+          <div class="switch__highlighter"></div>
+          <span class="switch__inner-icons">
+            <svg class="switch__icon" width="24px" height="24px" aria-hidden="true">
+              <use href="#light" />
+            </svg>
+            <svg class="switch__icon" width="24px" height="24px" aria-hidden="true">
+              <use href="#dark" />
+            </svg>
+          </span>
+          <span class="switch__sr">Modo Oscuro</span>
+        </label>
+      </li>
+      <li class="menu-item logout-item" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar Sesión</span>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Contenedor principal -->
+<main class="app-container" [class.sidebar-expanded]="isExpanded">
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- Modal de detalles de lista -->
+<div class="modal-overlay" *ngIf="listaSeleccionada" (click)="cerrarDetallesLista()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ listaSeleccionada.nombre }}</h2>
+      <div class="modal-actions">
+        <button class="export-btn" (click)="exportarListaExcel(listaSeleccionada)">
+          <i class="fas fa-file-excel"></i>
+          Exportar Excel
+        </button>
+        <button class="close-btn" (click)="cerrarDetallesLista()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="list-info">
+        <p class="list-date">Creada: {{ listaSeleccionada.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p class="list-date">Última modificación: {{ listaSeleccionada.ultimaModificacion | date:'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+      <div class="list-content">
+        <div *ngFor="let propietario of getPropietariosLista(listaSeleccionada)" class="propietario-item">
+          <div class="propietario-header">
+            <h3>{{ propietario.nombre }}</h3>
+            <span class="propietario-numero">({{ propietario.numero }})</span>
+          </div>
+          <div class="animales-list">
+            <div *ngFor="let dispositivo of propietario.animales" class="animal-item">
+              {{ dispositivo }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Diálogo de confirmación -->
+<div class="confirm-dialog" *ngIf="showConfirmDialog">
+  <div class="confirm-content">
+    <p>{{ confirmDialogMessage }}</p>
+    <div class="confirm-actions">
+      <button class="confirm-btn" (click)="confirmAction()">
+        <i class="fas fa-check"></i>
+        Confirmar
+      </button>
+      <button class="cancel-btn" (click)="cancelConfirmation()">
+        <i class="fas fa-times"></i>
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FAB Radial Menu -->
+<div class="radial" [class.active]="fabActive" *ngIf="!isAuthPage && !showChat && !showLocationPanel">
+  <a class="triggerButton" href="#" (click)="toggleFab($event)">
+    <i class="fa-solid fa-location-dot faOpen"></i>
+    <i class="fa-solid fa-robot faOpen"></i>
+    <i class="fa-solid fa-comment-dots faOpen"></i>
+    <i class="fa-solid fa-xmark faClose"></i>
+  </a>
+  <ul class="radialMenu" [class.active]="fabActive">
+    <li id="fa-1" class="radialItem">
+      <a href="#" (click)="onFabLocation($event)">
+        <img src="assets/logo.png" alt="Logo" style="width:54px;height:54px;object-fit:contain;display:block;margin:0 auto;" />
+        <span>Ubicación</span>
+      </a>
+    </li>
+    <li id="fa-3" class="radialItem">
+      <a href="#" (click)="onFabChat($event)">
+        <img src="assets/juda.png" alt="IA" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto;" />
+        <span>IA</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Botón flotante del chat -->
+<button class="chat-button" (click)="toggleChat()" [class.active]="showChat" *ngIf="!isAuthPage && showChatButton">
+  <i class="fa-solid fa-robot"></i>
+</button>
+
+<!-- Contenedor del chat -->
+<div class="chat-container" [class.active]="showChat" [class.expanded]="isChatExpanded" [class.gradient-bg]="showPanelImage" [class.show-panel-bg]="showPanelImage" *ngIf="!isAuthPage">
+  <div class="chat-header floating-header" [class.show-panel-bg]="showPanelImage" *ngIf="showFloatingControls">
+    <h3>Preguntale a Judah</h3>
+    <div class="chat-actions">
+      <button class="expand-chat" style="margin-right:8px;" (click)="toggleChatSize()">
+        <i class="fas" [class.fa-expand]="!isChatExpanded" [class.fa-compress]="isChatExpanded"></i>
+      </button>
+      <button class="close-chat" (click)="toggleChat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <div class="chat-messages" #chatMessages [class.show-panel-image]="showPanelImage">
+    <div class="panel-image-animation" *ngIf="showPanelImage">
+      <img src="assets/judaPanel.jpg" alt="Panel Juda" />
+    </div>
+    <div class="message" *ngFor="let message of messages; let last = last" [class.user-message]="message.role === 'user'">
+      <div class="message-content">
+        <i class="fas" [class.fa-user]="message.role === 'user'"></i>
+        <div class="message-text">{{ message.content }}</div>
+      </div>
+      <div class="message-time">{{ message.timestamp | date:'HH:mm' }}</div>
+    </div>
+    <div class="message" *ngIf="typingMessage">
+      <div class="message-content">
+        <div class="message-text">{{ typingMessage }}</div>
+      </div>
+      <div class="message-time">...</div>
+    </div>
+  </div>
+  
+  <div class="chat-input floating-input" [class.show-panel-bg]="showPanelImage" *ngIf="showFloatingControls">
+    <input type="text" placeholder="Escribe tu mensaje..." [(ngModel)]="currentMessage" [disabled]="isProcessing">
+    <button class="send-btn" [disabled]="!currentMessage || isProcessing" (click)="sendMessage()">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Panel de Ubicación con Overlay -->
+<ng-container *ngIf="showLocationPanel">
+  <div class="location-overlay" (click)="toggleLocationPanel()"></div>
+  <div class="location-panel" [class.show-panel-bg]="showLocationPanelAnimation">
+    <div class="location-header" *ngIf="!showLocationPanelAnimation">
+      <h3>Ubicación con GeoMu</h3>
+      <div class="location-actions">
+        <button class="expand-location" style="margin-right:8px;">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button class="close-location" (click)="toggleLocationPanel()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Animación de logo centrado sobre gradiente -->
+    <div class="panel-image-animation" *ngIf="showLocationPanelAnimation">
+      <img src="assets/logo.png" alt="Logo" />
+    </div>
+    <!-- Botón para minimizar panel de herramientas de polígonos -->
+    <button class="toggle-draw-controls" *ngIf="!showLocationPanelAnimation" (click)="toggleDrawControls()" title="Herramientas de polígonos">
+      <i class="fas" [ngClass]="showDrawControls ? 'fa-tools' : 'fa-angle-down'"></i>
+    </button>
+    <div class="location-content" [class.fade-panel-image]="showLocationPanelAnimation">
+      <div #map id="map"></div>
+    </div>
+  </div>
+</ng-container>
